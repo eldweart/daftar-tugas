@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar Tugas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center">
+
+  <!-- Container -->
+  <div class="w-full max-w-[450px] bg-white min-h-screen p-4 flex flex-col">
+
+    <!-- Header -->
+    <header class="mb-4">
+      <h1 class="text-2xl font-semibold text-gray-800">📋 Daftar Tugas</h1>
+      <p class="text-sm text-gray-500">Tugas harian kamu</p>
+    </header>
+
+    <!-- List -->
+    <ul id="hasil" class="flex-1 space-y-3"></ul>
+
+    <!-- Action -->
+    <a
+      href="input.html"
+      class="mt-4 w-full text-center bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 active:scale-95 transition"
+    >
+      ➕ Tambah Tugas
+    </a>
+
+  </div>
+
+  <script>
+    tampilkan();
+
+    function tampilkan() {
+      const data = localStorage.getItem("catatan");
+      const catatan = data ? JSON.parse(data) : [];
+      const daftar = document.getElementById("hasil");
+
+      daftar.innerHTML = "";
+
+      if (catatan.length === 0) {
+        daftar.innerHTML = `
+          <li class="text-center text-gray-400 py-10">
+            Belum ada tugas ✨
+          </li>
+        `;
+        return;
+      }
+
+      catatan.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.className =
+          "flex items-center justify-between bg-gray-50 p-3 rounded-xl border";
+
+        const kiri = document.createElement("div");
+        kiri.className = "flex items-center gap-3";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = item.selesai;
+        checkbox.className = "w-5 h-5 accent-blue-600";
+
+        const teks = document.createElement("span");
+        teks.innerText = item.teks;
+        teks.className =
+          "text-gray-800 " +
+          (item.selesai ? "line-through text-gray-400" : "");
+
+        checkbox.onchange = () => {
+          item.selesai = checkbox.checked;
+          localStorage.setItem("catatan", JSON.stringify(catatan));
+          tampilkan();
+        };
+
+        const hapus = document.createElement("button");
+        hapus.innerText = "Hapus";
+        hapus.className =
+          "text-sm text-red-500 hover:text-red-700";
+
+        hapus.onclick = () => {
+          catatan.splice(index, 1);
+          localStorage.setItem("catatan", JSON.stringify(catatan));
+          tampilkan();
+        };
+
+        kiri.appendChild(checkbox);
+        kiri.appendChild(teks);
+
+        li.appendChild(kiri);
+        li.appendChild(hapus);
+        daftar.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>

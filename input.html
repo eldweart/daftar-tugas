@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tambah Tugas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center">
+
+  <!-- Container -->
+  <div class="w-full max-w-[450px] bg-white min-h-screen p-4 flex flex-col">
+
+    <!-- Header -->
+    <header class="mb-6">
+      <h1 class="text-2xl font-semibold text-gray-800">➕ Tambah Tugas</h1>
+      <p class="text-sm text-gray-500">Catat tugas baru kamu</p>
+    </header>
+
+    <!-- Form -->
+    <div class="flex-1">
+      <input
+        type="text"
+        id="inputTeks"
+        placeholder="Contoh: Belajar Tailwind"
+        class="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Actions -->
+    <div class="space-y-3">
+      <button
+        onclick="simpan()"
+        class="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 active:scale-95 transition"
+      >
+        Simpan Tugas
+      </button>
+
+      <a
+        href="index.html"
+        class="block w-full text-center text-gray-600 py-2"
+      >
+        ⬅️ Kembali ke Daftar
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    function simpan() {
+      const input = document.getElementById("inputTeks");
+      const teks = input.value.trim();
+      if (!teks) return;
+
+      const data = localStorage.getItem("catatan");
+      const catatan = data ? JSON.parse(data) : [];
+
+      catatan.push({
+        teks: teks,
+        selesai: false
+      });
+
+      localStorage.setItem("catatan", JSON.stringify(catatan));
+      input.value = "";
+
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
